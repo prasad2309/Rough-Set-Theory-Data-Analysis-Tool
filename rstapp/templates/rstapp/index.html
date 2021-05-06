@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>RST TOOL</title>
+
+        <!-- Bootstrap CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Crimson+Pro:wght@400;500&family=Lato&display=swap" rel="stylesheet">
+        <!-- CSS file -->
+
+        <!-- Font Awesome CDN -->
+        <script src="https://kit.fontawesome.com/64b483cfec.js" crossorigin="anonymous"></script>
+
+        <!-- Charts.js CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">  
+        <!-- CSS -->
+        <style media="screen">
+            body{
+                font-family: Lato;
+                background-color: white;
+                background-image: url("https://www.transparenttextures.com/patterns/light-sketch.png");
+            }
+
+            .navbar{
+                font-family: 'Cinzel';
+                background-color: #206a5d;
+                color: white;
+                border-radius: 0;
+            }
+
+            .navbar h3{
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                margin-left: 1rem;
+            }
+
+            .input-section{
+                margin-top: 4rem;
+                margin-bottom: 4rem;
+            }
+
+            .card{
+                text-align: center;
+                background-color: white;
+                color: black;
+                width: 25rem;
+                margin: 2rem auto;
+                border-radius: 5px;
+                box-shadow: 5px 10px 8px #888888;
+
+                }
+
+            .btn-inp{
+                margin-top: 9px;
+            }
+
+            .results{
+/*                text-align: center;
+*/                padding: 5rem;
+            }
+
+            .t-div
+            {
+                display: block;
+                text-align: center;
+            }
+            .t-form
+            {
+                font-family: 'Lato';
+                display: inline-block;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .titles{
+                font-family: "Cinzel";
+                text-align: center;
+                margin: 2rem 0;
+                background-color: rgba(32,26,162,.12549019607843137);
+                padding: 1rem 0;
+                color: rgba(32,26,162,.8666666666666667);
+            }
+
+            .graph{
+                box-shadow: 5px 10px 8px #888888; 
+            }
+
+
+        </style>
+        
+    </head>
+    <body>
+
+        <nav class="navbar">
+            <h3><b>RST TOOL</b></h3>
+        </nav>
+
+        <!-- Input Section -->
+        <section>
+          <div class="input-section container-fluid" style="text-align: center;">
+            <div class="row">
+                <div class="col-lg-4" style="margin: auto;">
+                    <div class="card">
+                    <div class="card-header text-center" ><i class="fa fa-upload mx-2"></i>IMPORT FILE</div>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="myfile" id="myfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+
+                                 <input type="hidden" id="filename" name="filename">
+                        
+                                <button class="btn btn-outline-info btn-inp" type="submit" name="file" id="file" onclick="able_download()">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+              <div class="col-lg-4" style="margin: auto;">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button class="btn btn-success" type="submit" name="clear" id="clear">CLEAR DATABASE</button>
+                </form>
+              </div>
+
+              <div class="col-lg-4" style="margin: auto;">
+                  <div class="card";>
+                    <div class="card-header text-center" ><i class="fa fa-download mx-2"></i>OUTPUT FILE</div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-info btn-block" type="submit" name="dwld" id="dwld">Download</button>
+                            </form>
+                        </div>
+                    </div>
+              </div>     
+            </div>
+          </div>
+        </section>
+
+
+        {% if recent_uploaded_filename %}
+            <div class="alert alert-info" style="margin-top: 2rem; margin-bottom: 2rem; text-align: center;">
+                <h4>Currently analyisng file: {{ recent_uploaded_filename }}</h4>
+                <h5>Last Upload Time : {{ recent_uploaded_time }}</h5>
+            </div>
+        {% endif %}
+
+
+
+        <!-- Sending filename -->
+        <script type="text/javascript">
+            function able_download(){
+                document.getElementById("dwld").disabled = false;
+            }
+
+            //Filename handling
+            document.getElementById('myfile').onchange = uploadOnChange;
+            function uploadOnChange() {
+              var name = this.value;
+              var lastIndex = name.lastIndexOf("\\");
+              if (lastIndex >= 0) {
+                name = name.substring(lastIndex + 1);
+              } 
+              alert("Selected file: " + name);
+              document.getElementById("filename").value=name;
+            }
+        </script>
+
+
+        <!-- Result Section -->
+        <section id="analytics">
+          <div class="container-fluid" style="margin: 2rem 0;">
+
+            <div class="container-fluid titles">
+                <h1><i class="bi bi-file-bar-graph mr-3"></i></i>STATISTICAL ANALYSIS</h1>
+            </div>
+
+            <div class="row">
+
+              <div class="results col-lg-6" style="background-color: rgba(255,7,58,.12549019607843137);">
+                <div class="row" >
+                    <div class="col-md-3" style="text-align: center;">
+                        <i class="icon fas fa-arrow-circle-down fa-7x" style="margin-top: 1.25rem; color: #810034"></i>
+                    </div>
+
+                    <div class="col-lg-9">
+                    <h2 class="feature-title"><u>LOWER APPROXIMATION</u></h2>
+                    <br>
+                    {% for key,value in display_outputs.0.items  %}
+                      <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
+                    {% endfor %}
+                    </div>
+                </div>
+              </div>
+
+              <div class="results col-lg-6" style="background-color: rgba(0,123,255,.06274509803921569);">
+
+                <div class="row">
+                    <div class="col-md-3" style="text-align: center;">
+                        <i class="icon fas fa-arrow-circle-up fa-7x" style="margin-top: 1.25rem; color: #126e82"></i>
+                    </div>
+
+                    <div class="col-lg-9">
+                        <h2 class="feature-title"><u>UPPER APPROXIMATION</u></h2>
+                                            <br>
+                        {% for key,value in display_outputs.1.items  %}
+                          <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="results  col-lg-6" style="background-color: rgba(40,167,69,.12549019607843137);">
+                <div class="row">
+                    <div class="col-md-3" style="text-align: center;">
+                        <i class="icon fas fa-check-square fa-7x" style="margin-top: 1.25rem; color: #206a5d;"></i> 
+                    </div>
+
+                    <div class="col-lg-9">
+                        <h2 class="feature-title"><u>ACCURACY</u></h2>
+                                            <br>
+
+                        {% for key,value in display_outputs.2.items  %}
+                          <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
+                        {% endfor %}
+                    </div>
+                  </div>
+              </div>
+
+              <div class="results col-lg-6" style="background-color: rgba(255,255,51,.12549019607843137);">
+                <div class="row">
+                    <div class="col-md-3" style="text-align: center;">
+                        <i class="icon fas fa-balance-scale fa-6x" style="margin-top: 1.25rem; color: #e48900;"></i> 
+                    </div>
+
+                    <div class="col-lg-9">
+                        <h2 class="feature-title"><u>STABILITY INDEX</u></h2>
+                                            <br>
+
+                        {% for key,value in display_outputs.3.items  %}
+                          <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+          </div>
+        </section>
+
+
+        <div class="container-fluid titles" style="margin-top: 3rem;">
+                <h1><i class="fas fa-chart-line mr-3"></i>GRAPHICAL ANALYSIS</h1>
+            </div>
+
+
+        <!-- GRAPH -->
+        <div class="container-fluid">
+        <div class="t-div input-section" style="font-family: Roboto;">
+        <form method="POST" class="t-form form-inline">
+            {% csrf_token %}
+            <input type="text" id="threshold_input" name="threshold_input" class="form-control" placeholder="Enter threshold">
+            <button class="btn btn-success ml-4" id="threshold_button" name="threshold_button">SUBMIT</button>
+        </form>
+        </div>
+    
+
+        <div class="row" style="margin: 5rem 0;">
+          <div class="graph container" style="background-color: white;">
+            <canvas id="myChart" width="400" height="150"></canvas>
+          </div>
+        </div>
+
+        </div>
+
+
+        <script>
+        let temp = [];
+        let colors = ['blue','seagreen','navy','indigo','firebrick'];
+        let b = {{ chart_data }};
+        let l = {{ decision_attributes | safe }};
+
+
+        var ctx = document.getElementById('myChart');
+        
+        for(let i = 0; i < l.length; i++){
+            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
+            x.data = b[i];
+            x.label = l[i];
+            x.borderColor = colors[i];
+            x.backgroundColor = colors[i];  
+            temp.push(x);
+        }
+
+        let threshold = {{thresh}};
+        if(temp.length != 0){
+            len = temp[0].data.length
+            d = []
+            for(let i = 0; i < len; i++){
+                d.push(threshold)
+            }
+            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
+            x.data = d;
+            x.label = "Threshold";
+            x.borderColor = "red";
+            x.backgroundColor = "red";  
+            temp.push(x);
+        }
+        
+
+
+
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: [{% for i in query_results2 %}"{{ i.date }}",{% endfor %}],
+        datasets: temp
+        },
+        options: {
+            title: {
+                    display: true,
+                    text: 'Stability Index'
+                },
+        scales: {
+        yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+        }]
+        }
+        }
+        });
+        </script>
+        
+        
+    </body>
+</html>
