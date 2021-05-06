@@ -27,7 +27,7 @@ SECRET_KEY = 'spgwy!+$3%x$u*hoz8t!vjq0%)6#qz00(oht$rbknp&ty$%4y#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://rough-set-theory-gui.herokuapp.com/','127.0.0.1']
+ALLOWED_HOSTS = ['https://rst-gui.herokuapp.com/','127.0.0.1']
 
 
 # Application definition
@@ -122,7 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
