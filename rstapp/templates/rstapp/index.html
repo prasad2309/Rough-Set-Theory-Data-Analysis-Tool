@@ -59,8 +59,22 @@
 
                 }
 
+            .card-header{
+                background-color: #7b113a;
+                color: white;
+            }
+
             .btn-inp{
                 margin-top: 9px;
+                border-color: #7b113a;
+                color: #7b113a;
+            }
+
+            .btn-inp:hover{
+                background-color: #7b113a;
+                color: white;
+                border-color: #7b113a;
+
             }
 
             .results{
@@ -132,7 +146,7 @@
                 </form>
               </div>
 
-              <div class="col-lg-4" style="margin: auto;">
+              <!-- <div class="col-lg-4" style="margin: auto;">
                   <div class="card";>
                     <div class="card-header text-center" ><i class="fa fa-download mx-2"></i>OUTPUT FILE</div>
                         <div class="card-body">
@@ -143,9 +157,25 @@
                         </div>
                     </div>
               </div>     
-            </div>
+            </div> -->
+
+            <div class="col-lg-4" style="margin: auto;">
+                    <div class="card">
+                    <div class="card-header text-center" ><i class="fa fa-upload mx-2"></i>IMPORT MISSING VALUES FILE</div>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="missing-file" id="missing-file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+
+                                 <input type="hidden" id="filename2" name="filename2">
+                        
+                                <button class="btn btn-outline-danger btn-inp" type="submit" name="missing-attribute-file" id="missing-attribute-file" onclick="able_download()">Upload</button>
+                            </form>
+                        </div>
+                    </div>
           </div>
         </section>
+
 
 
         {% if recent_uploaded_filename %}
@@ -182,7 +212,7 @@
           <div class="container-fluid" style="margin: 2rem 0;">
 
             <div class="container-fluid titles">
-                <h1><i class="bi bi-file-bar-graph mr-3"></i></i>STATISTICAL ANALYSIS</h1>
+                <h2><i class="bi bi-file-bar-graph mr-3"></i></i>STATISTICAL ANALYSIS</h2>
             </div>
 
             <div class="row">
@@ -263,7 +293,7 @@
 
 
         <div class="container-fluid titles" style="margin-top: 3rem;">
-                <h1><i class="fas fa-chart-line mr-3"></i>GRAPHICAL ANALYSIS</h1>
+                <h2><i class="fas fa-chart-line mr-3"></i>GRAPHICAL ANALYSIS</h2>
             </div>
 
 
@@ -344,7 +374,6 @@
         }
         });
         </script>
-        
-        
+
     </body>
 </html>

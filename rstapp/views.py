@@ -174,29 +174,20 @@ def index(request):
                 
             print(finalop)
 
+            response = HttpResponse(content_type='application/ms-excel')
+            response['Content-Disposition'] = 'attachment; filename="Output_File.xls"'
+            wb = Workbook()
+            sheet1 = wb.add_sheet('Sheet 1')
+            for i in range(0,len(headings)):
+                sheet1.write(0, i, headings[i])
+            row = 1
+            for i in range(len(finalop[headings[i]])):
+                for j in range(len(headings)):
+                    sheet1.write(row,j,str(finalop[headings[j]][i]))
+                row = row + 1
+            wb.save(response)
+            return response
 
-        elif 'dwld' in request.POST:
-            if len(finalop['Timestamp']) > 0:
-                response = HttpResponse(content_type='application/ms-excel')
-                response['Content-Disposition'] = 'attachment; filename="Output_File.xls"'
-
-                wb = Workbook()
-
-                sheet1 = wb.add_sheet('Sheet 1')
-                for i in range(0,len(headings)):
-                    sheet1.write(0, i, headings[i])
-
-                row = 1
-                for i in range(len(finalop[headings[i]])):
-                    for j in range(len(headings)):
-                        sheet1.write(row,j,str(finalop[headings[j]][i]))
-                    row = row + 1
-
-                wb.save(response)
-
-                return response
-            else:
-                return HttpResponse('<h1>Upload a file to download the results!</h1>')
 
         elif 'threshold_button' in request.POST:
             threshold.objects.all().delete()
@@ -208,6 +199,104 @@ def index(request):
             stability_index.objects.all().delete()
             dates.objects.all().delete()
             last_outputs.objects.all().delete()
+
+        elif 'missing-attribute-file' in request.POST:
+            print("Missing file uploaded")
+            file = request.FILES['missing-file']
+            df = pd.read_csv(file)
+            df2 = df.copy()
+            for column in df2:
+                df2[column],unique = pd.factorize(df2[column],sort = True)
+            real = df.to_numpy()
+            num_row, num_col = df2.shape
+            arr = df2.to_numpy()             #converting to a numpy array for better single-element access
+            copy_arr =  np.copy(arr)
+            exclude_row = []
+            exclude_col = []                    #keep track of the rows with missing attributes
+            special = -1
+            for i in range(0,num_row):      
+                for j in range(0,num_col):
+                    if copy_arr[i][j]==special:         #-1 stands for a missing value 
+                        exclude_row.append(i)
+                        exclude_col.append(j)
+                
+            print(exclude_row)
+            print(exclude_col)
+            max_min_diff = []
+            for i in range(0,num_col):
+                t_min = 1000 
+                t_max = 0
+                for j in range(0,num_row):        
+                    if copy_arr[j][i]==special:
+                        continue
+                    if copy_arr[j][i]>t_max:           
+                        t_max = copy_arr[j][i]
+                        
+                    if copy_arr[j][i]<t_min:
+                        t_min = copy_arr[j][i]
+                max_min_diff.append(t_max - t_min)#code works fine till here
+            print(max_min_diff)
+            print(t_max)
+            print(t_min)
+            for i in range(len(exclude_col)):
+                target = 0 
+                col_pos = 0 
+                final_sum = 1000
+                for j in range(0,num_row):
+                    sum_1 = 0.0
+                    if(j==exclude_row[i]):
+                        continue
+                    for k in range(0,num_col):
+                        if (copy_arr[j][k] == -1 ):
+                            sum_1 += 1 ;
+                        else:
+                            sum_1 = sum_1 + abs( float(copy_arr[j][k] - copy_arr[exclude_row[i]][k])/float(max_min_diff[k]) )
+                        
+                    if(sum_1 < final_sum):
+                        final_sum = sum_1
+                        target = j 
+                real[exclude_row[i]][exclude_col[i]] = real[target][exclude_col[i]]
+                arr[exclude_row[i]][exclude_col[i]] = copy_arr[target][exclude_col[i]]
+                    
+                
+            t1 = list(range(0,num_row))     #converting from numpy back to a dataframe
+            temp = pd.DataFrame(real,t1,df.columns)
+            temp2 = pd.DataFrame(arr,t1,df.columns)
+
+
+
+
+
+
+            response = HttpResponse(content_type='application/ms-excel')
+            response['Content-Disposition'] = 'attachment; filename="Missing_Attribute_Solution.xls"'
+            wb = Workbook()
+            sheet1 = wb.add_sheet('Sheet 1')
+            headings = temp.columns.values.tolist()
+            for i in range(0,len(headings)):
+                sheet1.write(0, i, headings[i])
+            row = 1
+            # for i in range(len(finalop[headings[i]])):
+            #     for j in range(len(headings)):
+            #         sheet1.write(row,j,str(finalop[headings[j]][i]))
+            #     row = row + 1
+            headings = temp.columns.values.tolist()
+            rows = df.shape[0]
+            cols = df.shape[1]
+            print(rows)
+            print(cols)
+            for i in range(rows):
+                for j in range(cols):
+                    sheet1.write(row,j,str(df.loc[i,headings[j]]))
+                row = row + 1
+            wb.save(response)
+            return response
+
+
+
+
+
+        
 
     query_results1 = stability_index.objects.all()
 
