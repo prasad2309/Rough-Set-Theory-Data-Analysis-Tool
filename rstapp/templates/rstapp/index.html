@@ -135,6 +135,10 @@
                         
                                 <button class="btn btn-outline-info btn-inp" type="submit" name="file" id="file" onclick="able_download()">Upload</button>
                             </form>
+                            <form method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-info btn-block btn-inp" type="submit" name="dwld-rst" id="dwld-rst" style="background-color: #7b113a; color: white;">Download</button>
+                            </form>
                         </div>
                     </div>
                 </div>

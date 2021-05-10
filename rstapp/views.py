@@ -174,19 +174,23 @@ def index(request):
                 
             print(finalop)
 
-            response = HttpResponse(content_type='application/ms-excel')
-            response['Content-Disposition'] = 'attachment; filename="Output_File.xls"'
-            wb = Workbook()
-            sheet1 = wb.add_sheet('Sheet 1')
-            for i in range(0,len(headings)):
-                sheet1.write(0, i, headings[i])
-            row = 1
-            for i in range(len(finalop[headings[i]])):
-                for j in range(len(headings)):
-                    sheet1.write(row,j,str(finalop[headings[j]][i]))
-                row = row + 1
-            wb.save(response)
-            return response
+        elif 'dwld-rst' in request.POST:
+            if (len(finalop['Timestamp'])!=0):
+                response = HttpResponse(content_type='application/ms-excel')
+                response['Content-Disposition'] = 'attachment; filename="Output_File.xls"'
+                wb = Workbook()
+                sheet1 = wb.add_sheet('Sheet 1')
+                for i in range(0,len(headings)):
+                    sheet1.write(0, i, headings[i])
+                row = 1
+                for i in range(len(finalop[headings[i]])):
+                    for j in range(len(headings)):
+                        sheet1.write(row,j,str(finalop[headings[j]][i]))
+                    row = row + 1
+                wb.save(response)
+                return response
+            else:
+                return HttpResponse("<h1>Upload a file first!</h1>")
 
 
         elif 'threshold_button' in request.POST:
@@ -291,11 +295,6 @@ def index(request):
                 row = row + 1
             wb.save(response)
             return response
-
-
-
-
-
         
 
     query_results1 = stability_index.objects.all()
