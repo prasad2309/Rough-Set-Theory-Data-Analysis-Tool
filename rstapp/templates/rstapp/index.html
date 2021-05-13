@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>RST TOOL</title>
+        <title>Rough Set Theory Tool</title>
 
         <!-- Bootstrap CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -13,7 +13,7 @@
         <!-- Google Font -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Crimson+Pro:wght@400;500&family=Lato&display=swap" rel="stylesheet">
-        <!-- CSS file -->
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
         <!-- Font Awesome CDN -->
         <script src="https://kit.fontawesome.com/64b483cfec.js" crossorigin="anonymous"></script>
@@ -31,16 +31,19 @@
             }
 
             .navbar{
-                font-family: 'Cinzel';
-                background-color: #206a5d;
+                font-family: 'Playfair Display';
+                background-color: #264C53;
                 color: white;
                 border-radius: 0;
+                letter-spacing: 2px;
             }
 
-            .navbar h3{
-                margin-top: 1rem;
-                margin-bottom: 1rem;
-                margin-left: 1rem;
+            .navbar a{
+                font-family: 'Playfair Display';
+                font-size: 1.5rem;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                margin-left: 0.5rem;
             }
 
             .input-section{
@@ -105,9 +108,10 @@
                 color: rgba(32,26,162,.8666666666666667);
             }
 
-            .graph{
-                box-shadow: 5px 10px 8px #888888; 
+            .feature-title{
+                margin-top:1rem;
             }
+
 
 
         </style>
@@ -115,15 +119,34 @@
     </head>
     <body>
 
-        <nav class="navbar">
-            <h3><b>RST TOOL</b></h3>
+        <nav class="navbar navbar-expand-md ">
+                <a href="{% url 'index' %}" style="color:white; font-family: 'Cinzel';">Rough Set Theory Tool</a>
+            <!-- Toggler/collapsibe Button -->
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <i class="fas fa-bars" style="color: white;"></i>
+              </button>
+
+              <!-- Navbar links -->
+              <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item navbar-right mr-5">
+                        <a href="{% url 'ajax' %}" style="color:white; font-family: 'Lato';"><i class="fas fa-chart-line"></i> Live Analysis</a>                  
+                  </li>
+
+                  <li class="nav-item navbar-right">
+                    <a href="{% url 'usage' %}" style="color:white; font-family: 'Lato';"><i class="fa fa-book"></i> Usage</a>
+                  </li>
+                  
+                </ul>
+              </div>
+
         </nav>
 
         <!-- Input Section -->
         <section>
           <div class="input-section container-fluid" style="text-align: center;">
             <div class="row">
-                <div class="col-lg-4" style="margin: auto;">
+                <div class="col-lg-6" style="margin: auto;">
                     <div class="card">
                     <div class="card-header text-center" ><i class="fa fa-upload mx-2"></i>IMPORT FILE</div>
                         <div class="card-body">
@@ -133,37 +156,18 @@
 
                                  <input type="hidden" id="filename" name="filename">
                         
-                                <button class="btn btn-outline-info btn-inp" type="submit" name="file" id="file" onclick="able_download()">Upload</button>
+                                <button class="btn btn-outline-info btn-block btn-inp" type="submit" name="file" id="file">Upload</button>
                             </form>
                             <form method="post">
                                 {% csrf_token %}
-                                <button class="btn btn-info btn-block btn-inp" type="submit" name="dwld-rst" id="dwld-rst" style="background-color: #7b113a; color: white;">Download</button>
+                                <button class="btn btn-outline-info btn-block btn-inp" type="submit" name="dwld-rst" id="dwld-rst">Download</button>
                             </form>
                         </div>
                     </div>
                 </div>
 
-              <div class="col-lg-4" style="margin: auto;">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <button class="btn btn-success" type="submit" name="clear" id="clear">CLEAR DATABASE</button>
-                </form>
-              </div>
 
-              <!-- <div class="col-lg-4" style="margin: auto;">
-                  <div class="card";>
-                    <div class="card-header text-center" ><i class="fa fa-download mx-2"></i>OUTPUT FILE</div>
-                        <div class="card-body">
-                            <form method="post">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-info btn-block" type="submit" name="dwld" id="dwld">Download</button>
-                            </form>
-                        </div>
-                    </div>
-              </div>     
-            </div> -->
-
-            <div class="col-lg-4" style="margin: auto;">
+            <div class="col-lg-6" style="margin: auto;">
                     <div class="card">
                     <div class="card-header text-center" ><i class="fa fa-upload mx-2"></i>IMPORT MISSING VALUES FILE</div>
                         <div class="card-body">
@@ -173,42 +177,12 @@
 
                                  <input type="hidden" id="filename2" name="filename2">
                         
-                                <button class="btn btn-outline-danger btn-inp" type="submit" name="missing-attribute-file" id="missing-attribute-file" onclick="able_download()">Upload</button>
+                                <button class="btn btn-outline-danger btn-inp" type="submit" name="missing-attribute-file" id="missing-attribute-file">Upload</button>
                             </form>
                         </div>
                     </div>
           </div>
         </section>
-
-
-
-        {% if recent_uploaded_filename %}
-            <div class="alert alert-info" style="margin-top: 2rem; margin-bottom: 2rem; text-align: center;">
-                <h4>Currently analyisng file: {{ recent_uploaded_filename }}</h4>
-                <h5>Last Upload Time : {{ recent_uploaded_time }}</h5>
-            </div>
-        {% endif %}
-
-
-
-        <!-- Sending filename -->
-        <script type="text/javascript">
-            function able_download(){
-                document.getElementById("dwld").disabled = false;
-            }
-
-            //Filename handling
-            document.getElementById('myfile').onchange = uploadOnChange;
-            function uploadOnChange() {
-              var name = this.value;
-              var lastIndex = name.lastIndexOf("\\");
-              if (lastIndex >= 0) {
-                name = name.substring(lastIndex + 1);
-              } 
-              alert("Selected file: " + name);
-              document.getElementById("filename").value=name;
-            }
-        </script>
 
 
         <!-- Result Section -->
@@ -230,9 +204,10 @@
                     <div class="col-lg-9">
                     <h2 class="feature-title"><u>LOWER APPROXIMATION</u></h2>
                     <br>
-                    {% for key,value in display_outputs.0.items  %}
-                      <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
-                    {% endfor %}
+                        {% for key,value in display_outputs.0.items  %}
+                          <h4 class="resultvalues">{{ key }}(DA) : {{value}}</h4>
+                        {% endfor %}
+    
                     </div>
                 </div>
               </div>
@@ -294,90 +269,6 @@
             </div>
           </div>
         </section>
-
-
-        <div class="container-fluid titles" style="margin-top: 3rem;">
-                <h2><i class="fas fa-chart-line mr-3"></i>GRAPHICAL ANALYSIS</h2>
-            </div>
-
-
-        <!-- GRAPH -->
-        <div class="container-fluid">
-        <div class="t-div input-section" style="font-family: Roboto;">
-        <form method="POST" class="t-form form-inline">
-            {% csrf_token %}
-            <input type="text" id="threshold_input" name="threshold_input" class="form-control" placeholder="Enter threshold">
-            <button class="btn btn-success ml-4" id="threshold_button" name="threshold_button">SUBMIT</button>
-        </form>
-        </div>
-    
-
-        <div class="row" style="margin: 5rem 0;">
-          <div class="graph container" style="background-color: white;">
-            <canvas id="myChart" width="400" height="150"></canvas>
-          </div>
-        </div>
-
-        </div>
-
-
-        <script>
-        let temp = [];
-        let colors = ['blue','seagreen','navy','indigo','firebrick'];
-        let b = {{ chart_data }};
-        let l = {{ decision_attributes | safe }};
-
-
-        var ctx = document.getElementById('myChart');
-        
-        for(let i = 0; i < l.length; i++){
-            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
-            x.data = b[i];
-            x.label = l[i];
-            x.borderColor = colors[i];
-            x.backgroundColor = colors[i];  
-            temp.push(x);
-        }
-
-        let threshold = {{thresh}};
-        if(temp.length != 0){
-            len = temp[0].data.length
-            d = []
-            for(let i = 0; i < len; i++){
-                d.push(threshold)
-            }
-            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
-            x.data = d;
-            x.label = "Threshold";
-            x.borderColor = "red";
-            x.backgroundColor = "red";  
-            temp.push(x);
-        }
-        
-
-
-
-        var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-        labels: [{% for i in query_results2 %}"{{ i.date }}",{% endfor %}],
-        datasets: temp
-        },
-        options: {
-            title: {
-                    display: true,
-                    text: 'Stability Index'
-                },
-        scales: {
-        yAxes: [{
-        ticks: {
-        beginAtZero: true
-        }
-        }]
-        }
-        }
-        });
-        </script>
 
     </body>
 </html>

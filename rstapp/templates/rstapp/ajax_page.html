@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rough Set Theory Tool</title>
+
+        <!-- Bootstrap CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Crimson+Pro:wght@400;500&family=Lato&display=swap" rel="stylesheet">
+        <!-- CSS file -->
+
+        <!-- Font Awesome CDN -->
+        <script src="https://kit.fontawesome.com/64b483cfec.js" crossorigin="anonymous"></script>
+
+        <!-- Charts.js CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">  
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- CSS -->
+        <style media="screen">
+            body{
+                font-family: Lato;
+                background-color: white;
+                background-image: url("https://www.transparenttextures.com/patterns/light-sketch.png");
+            }
+
+            .navbar{
+                font-family: 'Playfair Display';
+                background-color: #264C53;
+                color: white;
+                border-radius: 0;
+                letter-spacing: 2px;
+            }
+
+            .navbar a{
+                font-family: 'Playfair Display';
+                font-size: 1.5rem;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                margin-left: 0.5rem;
+            }
+
+            .graph{
+                box-shadow: 5px 10px 8px #888888; 
+            }
+
+            .input-section{
+                margin-top: 4rem;
+                margin-bottom: 4rem;
+            }
+
+            .t-div
+            {
+                display: block;
+                text-align: center;
+            }
+            .t-form
+            {
+                font-family: 'Lato';
+                display: inline-block;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .titles{
+                font-family: "Cinzel";
+                text-align: center;
+                margin: 2rem 0;
+                background-color: rgba(32,26,162,.12549019607843137);
+                padding: 1rem 0;
+                color: rgba(32,26,162,.8666666666666667);
+            }
+
+            .present_link{
+                text-align: center;
+                padding: 1.25rem;
+            }
+
+        </style>
+        
+    </head>
+
+
+<body>
+        <nav class="navbar navbar-expand-md ">
+                <a href="{% url 'index' %}" style="color:white; font-family: 'Cinzel';">Rough Set Theory Tool</a>
+            <!-- Toggler/collapsibe Button -->
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <i class="fas fa-bars" style="color: white;"></i>
+              </button>
+
+              <!-- Navbar links -->
+              <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item navbar-right mr-5">
+                        <a href="{% url 'ajax' %}" style="color:white; font-family: 'Lato';"><i class="fas fa-chart-line"></i> Live Analysis</a>                  
+                  </li>
+
+                  <li class="nav-item navbar-right">
+                    <a href="{% url 'usage' %}" style="color:white; font-family: 'Lato';"><i class="fa fa-book"></i> Usage</a>
+                  </li>
+                  
+                </ul>
+              </div>
+
+        </nav>
+
+
+            <div class="container-fluid titles" style="margin-top: 3rem;">
+                <h3><i class="fas fa-chart-line mr-3"></i>GRAPHICAL ANALYSIS</h3>
+            </div>
+
+            <div class="t-div input-section" style="font-family: Roboto;">
+            <form method="POST" class="t-form form-inline">
+                {% csrf_token %}
+                <input type="text" id="link_input" name="link_input" class="form-control" placeholder="Enter Raw GitHub link for input .csv file" size="50" autocomplete="off">
+                <button class="btn btn-success ml-4" id="link_button" name="link_button">SUBMIT</button>
+            </form>
+            </div>
+
+
+        <!-- GRAPH -->
+        <div class="container-fluid">
+        <div class="t-div input-section" style="font-family: Roboto;">
+        <form method="POST" class="t-form form-inline">
+            {% csrf_token %}
+            <input type="text" id="threshold_input" name="threshold_input" class="form-control" placeholder="Enter threshold">
+            <button class="btn btn-success ml-4" id="threshold_button" name="threshold_button">SUBMIT</button>
+        </form>
+        </div>
+
+        <div class="alert-info present_link">
+            <h4 style="color:seagreen;"><u>Currently analysing link:  </u></h4>
+            <a href="{{ current_link }}" style="color: #264C53;"><h4>{{ current_link }}</h4></a>
+        </div>
+    
+
+        <div class="row" style="margin: 5rem 0;">
+          <div class="graph container" id="chart" style="background-color: white;">
+            <canvas id="myChart" width="400" height="150"></canvas>
+          </div>
+        </div>
+
+        </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<script>
+    
+    var ctx = document.getElementById('myChart');
+
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    // labels: [{% for i in chart_dates %}"{{ i }}",{% endfor %}],
+    labels : [],
+    datasets: []
+    },
+    options: {
+        title: {
+                display: true,
+                text: 'Stability Index'
+            },
+    scales: {
+    yAxes: [{
+    ticks: {
+    beginAtZero: true
+    }
+    }]
+    }
+    }
+    });
+</script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setInterval(function(){
+                $.ajax({
+                    type:'GET',
+                    url : "{% url 'ajaxjson' %}",
+                    success: function(response){
+                        let temp = [];
+                        let colors = ['blue','seagreen','navy','indigo','firebrick'];
+                        // let b = {{ chart_data }};
+                        // let l = {{ decision_attributes | safe }};
+                        let b = [];
+                        let l = [];
+
+                        for (var i = 0; i < response.chart_data.length; i++){
+                            b[i] = response.chart_data[i];
+                        } 
+                        for (var i = 0; i < response.decision_attributes.length; i++){
+                            l[i] = response.decision_attributes[i];
+                        } 
+
+                        let threshold = response.thresh;
+
+                        for(let i = 0; i < l.length; i++){
+                            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
+                            x.data = b[i];
+                            x.label = l[i];
+                            x.borderColor = colors[i];
+                            x.backgroundColor = colors[i];  
+                            temp.push(x);
+                        }
+
+                        if(temp.length != 0){
+                            len = temp[0].data.length
+                            d = []
+                            for(let i = 0; i < len; i++){
+                                d.push(threshold)
+                            }
+                            let x = {data: [],label:'',borderColor: '',fill:false,backgroundColor:''};
+                            x.data = d;
+                            x.label = "Threshold";
+                            x.borderColor = "red";
+                            x.backgroundColor = "red";  
+                            temp.push(x);
+                        }
+                        
+                        myChart.data.datasets = temp;
+                        myChart.data.labels = response.chart_dates;
+                        myChart.update();
+                                                     
+                    },
+                    error : function(response){
+                        console.log("Error!");
+                    }
+                });
+            },10000);
+
+        });
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+

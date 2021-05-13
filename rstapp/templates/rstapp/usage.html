@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rough Set Theory Tool</title>
+
+        <!-- Bootstrap CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Crimson+Pro:wght@400;500&family=Lato&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+
+        <!-- Font Awesome CDN -->
+        <script src="https://kit.fontawesome.com/64b483cfec.js" crossorigin="anonymous"></script>
+
+        <!-- Charts.js CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">  
+        <!-- CSS -->
+        <style media="screen">
+            body{
+                font-family: Lato;
+                background-color: white;
+                background-image: url("https://www.transparenttextures.com/patterns/light-sketch.png");
+            }
+
+            .navbar{
+                font-family: 'Playfair Display';
+                background-color: #264C53;
+                color: white;
+                border-radius: 0;
+                letter-spacing: 2px;
+            }
+
+            .navbar a{
+                font-family: 'Playfair Display';
+                font-size: 1.5rem;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                margin-left: 0.5rem;
+            }
+
+            .headings{
+                text-align: center;
+                margin-top: 4rem;
+                margin-bottom: 2rem;
+                padding: 1.5rem;
+                font-family: 'Cinzel';
+                border-color: #0c5460;
+            }
+
+            li{
+                font-size: 1.4rem;
+            }
+
+            
+
+        </style>
+        
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-md ">
+            <a href="{% url 'index' %}" style="color:white; font-family: 'Cinzel';">Rough Set Theory Tool</a>
+
+            <!-- Toggler/collapsibe Button -->
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <i class="fas fa-bars" style="color: white;"></i>
+              </button>
+
+              <!-- Navbar links -->
+              <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item navbar-right mr-5">
+                        <a href="{% url 'ajax' %}" style="color:white; font-family: 'Lato';"><i class="fas fa-chart-line"></i> Live Analysis</a>                  
+                  </li>
+
+                  <li class="nav-item navbar-right">
+                    <a href="{% url 'usage' %}" style="color:white; font-family: 'Lato';"><i class="fa fa-book"></i> Usage</a>
+                  </li>
+                  
+                </ul>
+              </div>
+        </nav>
+
+
+        <div class="container">
+            <div class='alert-info headings'>
+                <h3>RST PARAMETERS CALCULATIONS: QUICK ANALYSIS</h3>
+            </div>
+
+                  <ol>
+                    <li>
+                        Click on the “Choose file” button in the IMPORT FILE card of the input section. A file dialog will appear. Choose a .csv file of the input dataset.
+                    </li>
+                    <li> 
+                        Click on “Upload” button.
+                    </li>
+                    <li>
+                       The RST parameters will then be calculated on the input dataset and the computed results will be displayed in the Statistical Analysis section. 
+                    </li>
+                    <li>
+                        Press on the “Download” button to download an output Excel file containing the results as showcased in the Statistical Analysis Section.
+                    </li>
+                  </ol>
+
+                <div class="alert-info headings">
+                    <h3>RST PARAMETERS CALCULATIONS: LIVE ANALYSIS</h3>
+                </div>
+
+                <ol>
+                    <li>Enter the Raw link of a .csv dataset file which is uploaded on GitHub as a repository, in the first text box and click "SUBMIT" button present in front of it.</li>
+                    <li>Wait for 10 seconds.</li>
+                    <li>A line graph will then be displayed. It is refreshed automatically after a period of 10 seconds. </li>
+                    <li>The user can set a threshold by giving an input in the second text field and clicking on “SUBMIT” button.</li>
+                </ol>
+
+
+                <div class="alert-info headings">
+                    <h3>MISSING ATTRIBUTE</h3>
+                </div>
+
+                <ol>
+                    <li>Click on the “Choose file” button in the IMPORT MISSING VALUES FILE card of the input section. A file dialog will appear.</li>
+                    <li>Choose a .csv file of the input dataset and click on Upload button. </li>
+                    <li>An output Excel file with the computed results is automatically downloaded when the user clicks on the “Upload” button.</li>
+                </ol>
+
+              </div>
+
+        
+
+    </body>
+</html>
