@@ -315,11 +315,9 @@ def using_ajax(request):
         a = github(link=l)
         a.save()
 
-    current_link = github.objects.last().link
+    # current_link = github.objects.last().link
     
-    return render(request, 'rstapp/ajax_page.html',{
-        'current_link':current_link
-        })
+    return render(request, 'rstapp/ajax_page.html')
 
 def ajaxjson(request):
     # url = "https://raw.githubusercontent.com/prasad2309/input_dataset/main/temp.csv"
