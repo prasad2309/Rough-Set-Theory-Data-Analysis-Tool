@@ -1,4 +1,4 @@
-# RST-Btech-Project
+# Rough Set Theory - GUI
 
 With the colossal amount of data that is being generated every day over the internet, the need for reliant, efficient and easy to use data analysis tools is rising. To discover patterns in Big Data is essential for various business organizations and in fact, Intelligent information analysis is one of the buzzing issues in the field of Artificial Intelligence today. Often in real life, the data available for analysis is inconsistent and unfiltered. To perform knowledge discovery on such data, we need tools that could perform this task without the use of heavy hardware resources.
 
